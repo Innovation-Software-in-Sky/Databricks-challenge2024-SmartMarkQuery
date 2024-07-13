@@ -1,0 +1,29 @@
+{
+  "name": "rag-query",
+  "version": "1.0.0",
+  "description": "Person can query on Markdown data source using gen AI",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "nodemon src/index.ts",
+    "serve": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.14.1",
+    "@huggingface/inference": "^2.7.0",
+    "@langchain/community": "^0.2.18",
+    "@types/express": "^4.17.21",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs-extra": "^11.2.0",
+    "langchain": "^0.2.9",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4"
+  }
+}
