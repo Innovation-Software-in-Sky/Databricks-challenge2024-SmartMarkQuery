@@ -3,11 +3,12 @@ import * as dotenv from 'dotenv';
 import {embeddingService} from './services/embeddings_service'
 import { ragService } from './services/rag_services';
 import path from 'path';
+import { clearlogsService, loggingService } from './services/logging_service';
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 app.use(express.json());
 
@@ -59,12 +60,29 @@ app.post('/generate_response/gemini', async (req, res) => {
   }
     const client = "gemini";
     const result = await ragService(query,dbPath,g_key,hf_key,client)
-
+    await loggingService(dbPath,query,JSON.stringify(result))
     res.json({ result });
   } catch (error) {
     console.error('Error generating response:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+app.delete('/clearlogs', async (req, res) => {
+  try{
+    await clearlogsService(dbPath);
+    res.status(200).send('Cleared logs');
+  }catch (error) {
+    console.error('Error clearing logs:', error);
+    res.status(500).send('Internal Server Error');
+  }
+})
+
+const clientBuildPath = path.join(__dirname, '../../app/build');
+app.use(express.static(clientBuildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientBuildPath, "index.html"));
 });
 
 

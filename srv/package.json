@@ -4,7 +4,7 @@
   "description": "Person can query on Markdown data source using gen AI",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && copyfiles -u 1 src/data/**/* dist && copyfiles -u 1 src/vectors/**/* dist",
     "start": "nodemon src/index.ts",
     "serve": "node dist/index.js"
   },
@@ -19,11 +19,13 @@
     "express": "^4.19.2",
     "fs-extra": "^11.2.0",
     "langchain": "^0.2.9",
+    "nodemon": "^3.1.4",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4"
+    "@types/fs-extra": "^11.0.4",
+    "copyfiles": "^2.4.1"
   }
 }

@@ -22,14 +22,14 @@ async function ragService(query:string,dbPath:string,key_llm:string, key_vec:str
             const content  =  await readFileContent(file);
             context.push(content);
         }
-        const prompt = await prompt_template(query,context) ;
+        const prompt = await prompt_template(dbPath,query,context) ;
 
         if(client == "hf"){
             const response = await generateResponseWithHuggingFace(prompt,"gpt2",key_llm,100,0.7);
             return response;
         }
         else if(client == "gemini"){
-            const response = await generateResponseWithGemini(prompt,"gemini-1.5-pro",key_llm,100,0.7);
+            const response = await generateResponseWithGemini(prompt,"gemini-1.5-pro",key_llm,2500,0.7,filepaths);
             return response;
         }
         return "No client endpoint";

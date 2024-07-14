@@ -7,8 +7,8 @@
     "build:client": "cd app && npm install && npm run build",
     "build:server": "cd srv && npm install && npm run build",
     "start:server": "cd srv && npm install && ts-node src/index.ts",
-    "start":"cd srv && node dist/index.js",
-    "bootstrap":"npm run build:client && npm run build:server"
+    "start": "cd srv && node dist/index.js",
+    "bootstrap": "npm run build:client && npm run build:server"
   },
   "keywords": [],
   "author": "",
