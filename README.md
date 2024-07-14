@@ -86,6 +86,17 @@ In the second part of the project, you will build a chatbot that utilizes the ve
    npm run start
 
    ```
+5. Endpoints
+   ```bash
+   UI app
+      http://localhost:8080/
+   [GET] One Time Process - Generate Vectors
+      http://localhost:8080/generate_vectors
+   [POST] Query the BOT using Gemini:
+      http://localhost:8080/generate_response/gemini
+      Payload: { "query": "Give me format of account-key assertion"}
+
+   ```
 
 ## Technical Architecture
 <a href="" float="center">
