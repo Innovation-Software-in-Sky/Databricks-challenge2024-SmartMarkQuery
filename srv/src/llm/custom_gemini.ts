@@ -10,8 +10,6 @@ async function generateResponseWithGemini(prompt: string,model_name:string, key:
         const generationConfig = {
             maxOutputTokens: tokens,
             temperature: temperature,
-            topP: 0.1,
-            topK: 16,
           };
         const model = genAI.getGenerativeModel({ model: model_name, generationConfig:generationConfig});
 

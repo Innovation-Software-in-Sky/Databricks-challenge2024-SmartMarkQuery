@@ -7,16 +7,31 @@ import { readFileContent } from '../file_ops/read_content';
 import { cosineSimilarity } from '../file_ops/cosine_similarity';
 import { generateResponseWithGemini } from '../llm/custom_gemini';
 import { prompt_template } from '../prompt/template';
+const faiss = require('faiss-node');
+const fs = require('fs');
 async function ragService(query:string,dbPath:string,key_llm:string, key_vec:string, client:string){
     try {
         const embeddingsData = await retriveEmbeddings(query,dbPath);
         const queryEmbedding = await getEmbedding(query,key_vec);
+        const index = new faiss.IndexFlatL2(384); 
         const similarities = embeddingsData.map(item => ({
             ...item,
-            similarity: cosineSimilarity(queryEmbedding, Array.from(new Float32Array(item.embedding)))
+            similarity: cosineSimilarity(queryEmbedding, JSON.parse(item.embedding))
         }));
-        const topK = similarities.sort((a, b) => b.similarity - a.similarity).slice(0, 5);
-        const filepaths = topK.map(item => item.file_path);
+        const indexing = embeddingsData.map(item =>{
+            index.add(JSON.parse(item.embedding));
+            const { distances, labels } = index.search(queryEmbedding, 1);
+            return {
+                ...item,
+                distances:distances,
+                labels:labels
+
+            }
+        } );
+        const topK_cosine = similarities.sort((a, b) => a.similarity - b.similarity);
+        const topK_index = indexing.sort((a, b) => a.distances - b.distances);
+        const top5 = [...topK_cosine.slice(0,5),...topK_index.slice(0,5)];
+        const filepaths = top5.map(item => item.file_path);
         let context = [];
         for(const file of filepaths){
             const content  =  await readFileContent(file);
